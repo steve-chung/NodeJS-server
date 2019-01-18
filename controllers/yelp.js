@@ -10,11 +10,10 @@ exports.getYelp = (req, response, next) => {
     sort_by: 'distance'
   })
     .then(res => {
-      console.log(res.jsonBody.businesses)
       return response.json(res.jsonBody.businesses)
     })
     .catch(e => {
       console.log(e)
-      next(e)
+      response.sendStatus(e.statusCode)
     })
 }
