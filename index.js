@@ -4,10 +4,11 @@ const path = require('path')
 const app = express();
 const bodyParser = require('body-parser')
 const apiRoutes = require('./routes/api')
-const user = require('./models/user')
+const authRoutes = require('./routes/auth')
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use('/api/auth', authRoutes)
 app.use('/api', apiRoutes)
 
 app.listen(process.env.PORT, () => {
