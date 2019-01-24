@@ -8,6 +8,8 @@ const authRoutes = require('./routes/auth')
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json('application/json'))
+
 app.use('/api/auth', authRoutes)
 app.use('/api', apiRoutes)
 
