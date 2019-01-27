@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const RevokedToken = require('../models/revokedToken')
 const { createTokens } = require('../util/token')
 const bcrypt = require('bcryptjs')
 
@@ -35,7 +36,6 @@ exports.register = (req, res, next) => {
         .findOrCreate({where: {email:email}, 
         defaults: {phone, password: hash, name}})
         .spread((user, created) => {
-          
           if (created) {
               return loginRes(user, res)
             } else {
@@ -91,5 +91,25 @@ exports.login = (req, res, next) => {
 
 
 exports.logout = (req, res, next) => {
-
-} 
+  let token = req.headers['x-access-token'] || req.headers['authorization']
+  if (token.startsWith('Bearer ')) {
+    token = token.slice(7, token.length);
+  }
+  console.log(token)
+  RevokedToken
+    .findOrCreate({where: {jti: token}, 
+      defaults: {jti: token}})
+      .spread((token, created) => {
+        if (created) {
+          return res.status(200).json({
+            message: 'Successfully logged out'
+          })
+        } 
+      })
+      .catch(err => {
+        console.log(err)
+        res.status(500).json({
+          message:'Something went wrong'
+        })
+      })
+}   
