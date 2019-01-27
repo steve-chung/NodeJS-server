@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const { createTokens } = require('../util/token')
 const bcrypt = require('bcryptjs')
 
 exports.register = (req, res, next) => {
@@ -9,22 +10,32 @@ exports.register = (req, res, next) => {
 
   bcrypt.genSalt(10, function(err, salt) {
     bcrypt.hash(notHashedPassword, salt, function(err, hash) {
-      console.log(hash)
       User
         .findOrCreate({where: {email:email}, 
         defaults: {phone, password: hash, name}})
         .spread((user, created) => {
+          
           if (created) {
-          return res.status(200).json({
-              message:`User ${user.name} was created`,
-              id: user.id,
-              username: user.name,
-            })
-          } else {
+            let accessToken
+            let refreshToken
+            createTokens(user, '123', '654')
+              .then((tokens) => {
+                accessToken = tokens[0]
+                refreshToken = tokens[1]
+                return res.status(200).json({
+                  message:`User ${user.name} was created`,
+                  id: user.id,
+                  username: user.name,
+                  accessToken,
+                  refreshToken
+                })
+              })
+              return 
+            } else {
               return res.status(400).json({
                 message:`User ${name} is already exist, please use different name`
               })
-          }
+            }
         })
         .catch(err => {
           console.log(err)
