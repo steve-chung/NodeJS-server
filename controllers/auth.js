@@ -56,11 +56,9 @@ exports.register = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   const email = req.body.email
-  console.log(email)
   const password = req.body.password
   User.findOne({ where: { email }, raw: true })
     .then (user => {
-      console.log(user)
       if (!user) {
         // user with provided email not found
         throw new Error('Invalid login');
