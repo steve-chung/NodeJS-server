@@ -10,6 +10,7 @@ const sequelize = require('./util/database')
 const Game = require('./models/games')
 const User = require('./models/user')
 const Player = require('./models/players')
+const Score = require('./models/score')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json('application/json'))
@@ -21,6 +22,8 @@ Game.belongsTo(User, { foreignKey: 'user_id', constraints: true, onDelete: 'CASC
 User.hasMany(Game)
 Player.belongsTo(User, { foreignKey: 'user_id', constraints: true, onDelete: 'CASCADE' })
 User.hasMany(Player)
+Score.belongsTo(User, { foreignKey: 'user_id', constraints: true, onDelete: 'CASCADE' })
+User.hasMany(Score)
 
 sequelize
   .sync()

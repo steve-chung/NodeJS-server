@@ -10,7 +10,7 @@ router.get('/courses', yelpController.getYelp)
 router.post('/')
 
 router.post('/reserve', validateToken.checkToken, reserveController.postReserve)
-// router.post('/holes', validateToken.checkToken, holesController.postHoles)
+router.post('/holes', validateToken.checkToken, holesController.postHoles)
 
 // router.get('/holes', validateToken.checkToken, holesController.getHoles)
 
