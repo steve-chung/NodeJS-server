@@ -10,6 +10,8 @@ const Game = sequelize.define('games', {
     primaryKey: true
   },
   course: Sequelize.STRING,
+  date: Sequelize.DATE,
+  player_id: Sequelize.INTEGER,
   total_score: Sequelize.INTEGER
 })
 

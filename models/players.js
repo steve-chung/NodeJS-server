@@ -11,7 +11,8 @@ const Player = sequelize.define('players', {
   },
   email: Sequelize.STRING,
   name: Sequelize.STRING,
+  user_id: { type: Sequelize.STRING, field: 'user_id'},
   aveScore: Sequelize.INTEGER
-})
+}, { underscored: true })
 
 module.exports = Player

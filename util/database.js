@@ -1,9 +1,19 @@
 const Sequelize = require('sequelize')
-require('dotenv/config')
+// const decamelize = require('decamelize')
+const config = require('../db/config').development
 
-const sequelize = new Sequelize('golf-score-tracker', process.env.USERID, process.env.PASSWORD, {
-  dialect: 'postgres',
-  host:'localhost'
+const sequelize = new Sequelize(config)
+
+sequelize.addHook('beforeDefine', (attributes) => {
+  Object.keys(attributes).forEach((name) => {
+      if (typeof attributes[name] !== 'function') {
+          attribute = attributes[name]
+          const _underscored = attribute.underscored === undefined ? sequelize.options.define.underscored : attribute.underscored;
+          if (attribute.field === undefined && _underscored !== undefined) {
+              attribute.field = sequelize.Utils.underscoredIf(name, _underscored);
+          }
+      }
+  })
 })
 
 sequelize.authenticate()

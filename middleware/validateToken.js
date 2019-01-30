@@ -1,5 +1,5 @@
-
-let jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
 
 let checkToken = (req, res, next) => {
   let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
@@ -16,8 +16,14 @@ let checkToken = (req, res, next) => {
           message: 'Token is not valid'
         });
       } else {
-        req.decoded = decoded
-        next()
+        User.findOne({ where: {email: decoded.user}})
+          .then(user => {
+            req.user = user
+            next()
+          })
+          .catch( err => {
+            console.log(err)
+          })
       }
     })
   } else {
