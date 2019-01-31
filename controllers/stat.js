@@ -74,7 +74,25 @@ exports.postStat = async (req, res, next) => {
 } 
 
 exports.getStat = async (req, res, next) => {
-  
+  const statId = req.params.id
+  Stat.findOne({ where: {id: statId}})
+    .then(stat => {
+      return res.status(200).json({
+        stat_id: stat.id,
+        firstClub: stat.first_club,
+        firstDistance: stat.first_distance,
+        secondClub: stat.second_club,
+        secondDistance: stat.second_distance,
+        stroksGreen: stat.stroks_green,
+        totalShots: stat.total_shot
+      })
+    })
+    .catch(err => {
+      console.log(err)
+      return res.status(500).json({
+        message: 'Something went wrong'
+      })
+    })
 }
 
 exports.putStat = async (req, res, next) => {
