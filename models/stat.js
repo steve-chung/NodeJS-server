@@ -13,8 +13,8 @@ const Stat = sequelize.define('stat', {
   first_distance: Sequelize.INTEGER,
   second_club: Sequelize.STRING,
   second_distance: Sequelize.INTEGER,
-  stroks_green = Sequelize.INTEGER,
-  total_shot = Sequelize.INTEGER,
+  stroks_green: Sequelize.INTEGER,
+  total_shot: Sequelize.INTEGER,
 
 })
 module.exports = Stat
