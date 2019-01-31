@@ -70,13 +70,49 @@ exports.postStat = async (req, res, next) => {
     return res.status(500).json({
       message: 'Something went wrong'
     })
-    }
+  }
 } 
 
 exports.getStat = async (req, res, next) => {
-
+  
 }
 
 exports.putStat = async (req, res, next) => {
-
+  const statId = req.params.id
+  const gameId = req.body.game_id
+  const firstClub = req.body.firstClub
+  const firstDistance = req.body.firstDistance
+  const secondClub = req.body.secondClub
+  const secondDistance = req.body.secondDistance
+  const stroksGreen = req.body.stroksGreen
+  const totalShots = req.body.totalShots
+  const totalScore = req.body.totalScore
+  try {
+    await Game.findOne({ where: { id: gameId }})
+    .then(newGame => {
+      newGame.total_score = totalScore
+      newGame.save()
+    })
+    await Stat.findOne({where: {id: statId}})
+      .then(stat => {
+        stat.first_club = firstClub
+        stat.first_distance = firstDistance
+        stat.second_club = secondClub
+        stat.second_distance = secondDistance
+        stat.stroks_green = stroksGreen
+        stat.total_shot = totalShots
+        stat.save()
+        .then(newStat => {
+          return res.status(200).json({
+            message: `Successfully updated a stat ${newStat.id}`
+          })
+        })
+      })
+  }
+  catch(err) {
+    console.log(err)
+    return res.status(500).json({
+      message: 'Something went wrong'
+    })
+  }
 }
