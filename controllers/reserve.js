@@ -9,7 +9,6 @@ exports.postReserve = async (req, res, next) => {
   const course = req.body.course
   const date = req.body.date
   const totalScores = req.body.totalScores
-  console.log(user.id)
   try {
     await asyncForEach(players, async player => {
       await Player
